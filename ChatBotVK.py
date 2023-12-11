@@ -1,5 +1,6 @@
 import vk_api
 from vk_api.longpoll import VkLongPoll, VkEventType
+import filter_words
 
 class Bot:
     def __init__(self):
@@ -22,12 +23,13 @@ class Bot:
         self.vk.method('messages.send', {'user_id': user_id, 'message': message, 'random_id': 0})
 
     def process_message(self, user_id, user_message):
+        # print(user_message, filter_words.check_message(user_message))
         # обработка сообщений пользователя и ответы ему
-        if user_message.lower() == "привет":
+        if filter_words.check_message(user_message):
+            self.write_msg(user_id, "Данное сообщение содержит некорректные выражения!")
+        elif user_message.lower() == "привет":
             self.write_msg(user_id, "Хай")
         elif user_message.lower() == "пока":
             self.write_msg(user_id, "Пока((")
         else:
             self.write_msg(user_id, "Не поняла вашего ответа...")
-
-
