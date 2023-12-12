@@ -1,6 +1,9 @@
 import vk_api
 from vk_api.longpoll import VkLongPoll, VkEventType
+from google.cloud import dialogflow
 import filter_words
+import model
+
 
 class Bot:
     def __init__(self):
@@ -23,13 +26,39 @@ class Bot:
         self.vk.method('messages.send', {'user_id': user_id, 'message': message, 'random_id': 0})
 
     def process_message(self, user_id, user_message):
-        # print(user_message, filter_words.check_message(user_message))
+        self.way1(user_id, user_message)
+
+    def way1(self, user_id, user_message):
+        # Авторизация в Dialogflow
+        projectid = 'helperofhead-mldt'
+        sessionid = f'vk-{user_id}'
+        languagecode = 'ru-RU'
+        client = dialogflow.SessionsClient()
+        session = client.sessionpath(projectid, sessionid)
+
         # обработка сообщений пользователя и ответы ему
-        if filter_words.check_message(user_message):
-            self.write_msg(user_id, "Данное сообщение содержит некорректные выражения!")
-        elif user_message.lower() == "привет":
+        text = user_message
+        textinput = dialogflow.types.TextInput(text=text, languagecode=languagecode)
+        queryinput = dialogflow.types.QueryInput(text=textinput)
+        response = client.detectintent(session=session, queryinput=queryinput)
+
+        # Отправка ответа от Dialogflow пользователю в ВКонтакте
+        self.write_msg(user_id, response.queryresult.fulfillmenttext)
+
+    def way2(self, user_message, user_id):
+        sessionid = f'vk-{user_id}'
+        # print(user_message, filter_words.check_message(user_message))
+        # if filter_words.check_message(user_message):
+        #     self.write_msg(user_id, "Данное сообщение содержит некорректные выражения!")
+        # else:
+        response = model.model_answer(user_message, sessionid)
+        self.write_msg(user_id, response) # 'usermessage: '+ user_message + '\ncheck: ' + str(filter_words.check_message(user_message)) + '\nanswer: '+ response)
+
+    def wayold(self, user_message, user_id):
+        if user_message.lower() == "привет":
             self.write_msg(user_id, "Хай")
         elif user_message.lower() == "пока":
             self.write_msg(user_id, "Пока((")
         else:
             self.write_msg(user_id, "Не поняла вашего ответа...")
+
