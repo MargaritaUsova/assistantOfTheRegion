@@ -7,7 +7,8 @@ from google.auth import exceptions, default
 from google.protobuf.json_format import MessageToJson
 # from google.protobuf.struct_pb2 import Struct, Value
 import os
-os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "/Users/margaritausova/Downloads/helperofhead-mldt-487b9b9e45ec.json"
+#os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "/Users/margaritausova/Downloads/helperofhead-mldt-487b9b9e45ec.json"
+os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "C:\Users\belkalia\Downloads\helperofhead-mldt-487b9b9e45ec.json"
 
 class Bot:
     def __init__(self):
@@ -31,9 +32,6 @@ class Bot:
         self.vk.method('messages.send', {'user_id': user_id, 'message': message, 'random_id': 0})
 
     def process_message(self, user_id, user_message):
-        self.way1(user_id, user_message)
-
-    def way1(self, user_id, user_message):
         projectid = 'helperofhead-mldt'
         sessionid = f'vk-{user_id}'
         languagecode = 'ru-RU'
@@ -53,21 +51,3 @@ class Bot:
 
         # Отправка ответа от Dialogflow пользователю в ВКонтакте
         self.write_msg(user_id, response.query_result.fulfillment_text)
-
-    def way2(self, user_message, user_id):
-        sessionid = f'vk-{user_id}'
-        # print(user_message, filter_words.check_message(user_message))
-        # if filter_words.check_message(user_message):
-        #     self.write_msg(user_id, "Данное сообщение содержит некорректные выражения!")
-        # else:
-        response = model.model_answer(user_message, sessionid)
-        self.write_msg(user_id, response) # 'usermessage: '+ user_message + '\ncheck: ' + str(filter_words.check_message(user_message)) + '\nanswer: '+ response)
-
-    def wayold(self, user_message, user_id):
-        if user_message.lower() == "привет":
-            self.write_msg(user_id, "Хай")
-        elif user_message.lower() == "пока":
-            self.write_msg(user_id, "Пока((")
-        else:
-            self.write_msg(user_id, "Не поняла вашего ответа...")
-
