@@ -23,6 +23,8 @@ resolutions = parse_website(url)
 # if resolutions:
 #     for title, link in resolutions.items():
 #         print(f"{title}: {link}")
+
+
 with open('data.txt', 'w') as file:
     for key, value in resolutions.items():
         file.write(f'{key}, {value}\n')
