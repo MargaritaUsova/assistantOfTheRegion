@@ -8,7 +8,8 @@ from google.protobuf.json_format import MessageToJson
 # from google.protobuf.struct_pb2 import Struct, Value
 import os
 #os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "/Users/margaritausova/Downloads/helperofhead-mldt-487b9b9e45ec.json"
-os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "C:\Users\belkalia\Downloads\helperofhead-mldt-487b9b9e45ec.json"
+os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = r"C:\Users\belkalia\Downloads\helperofhead-mldt-487b9b9e45ec.json"
+
 
 class Bot:
     def __init__(self):
