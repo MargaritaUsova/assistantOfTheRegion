@@ -1,6 +1,5 @@
 import requests
 from bs4 import BeautifulSoup
-import pickle
 
 def parse_website(url):
     response = requests.get(url)
